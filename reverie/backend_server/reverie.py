@@ -605,11 +605,30 @@ if __name__ == '__main__':
   #                    "July1_the_ville_isabella_maria_klaus-step-3-21")
   # rs.open_server()
 
-  origin = input("Enter the name of the forked simulation: ").strip()
-  target = input("Enter the name of the new simulation: ").strip()
+  # origin = input("Enter the name of the forked simulation: ").strip()
+  # target = input("Enter the name of the new simulation: ").strip()
 
+  import argparse
+
+  parser = argparse.ArgumentParser()
+  parser.add_argument("-c", "--command", help="your command")
+  parser.add_argument("-s", "--simulation", help="your simulation name")
+  parser.add_argument("-o", "--origin", help="forked simulation name")
+  parser.add_argument("-r", "--run", type=int, help="number of steps to run")
+  parser.add_argument("-a", "--age", type=int, help="your age")
+  args = parser.parse_args()
+  if args.origin:
+    origin = args.origin 
+  else:  
+    origin = input("Enter the name of the forked simulation [base_the_ville_isabella_maria_klaus]: ").strip()
+    if origin == "":
+      origin = "base_the_ville_isabella_maria_klaus"
+  from random import random
+  target = args.simulation or "sim-"+str(random()*1000)
   rs = ReverieServer(origin, target)
   rs.open_server()
+  if origin == "": origin = "base_the_ville_isabella_maria_klaus"
+
 
 
 
