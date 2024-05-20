@@ -262,14 +262,16 @@ def safe_generate_response(prompt,
       pass
   return fail_safe_response
 
+import ollama
 
 def get_embedding(text, model=openai_config["embeddings"]):
   text = text.replace("\n", " ")
   if not text: 
     text = "this is blank"
-  response = embeddings_client.embeddings.create(input=[text], model=model)
-  cost_logger.update_cost(response=response, input_cost=openai_config["embeddings-costs"]["input"], output_cost=openai_config["embeddings-costs"]["output"])
-  return response.data[0].embedding
+#   response = embeddings_client.embeddings.create(input=[text], model=model)
+#   cost_logger.update_cost(response=response, input_cost=openai_config["embeddings-costs"]["input"], output_cost=openai_config["embeddings-costs"]["output"])
+#   return response.data[0].embedding
+  return ollama.embeddings(model=model,prompt=text)
 
 
 if __name__ == '__main__':
