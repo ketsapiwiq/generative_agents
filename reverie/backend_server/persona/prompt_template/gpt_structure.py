@@ -40,12 +40,25 @@ def setup_client(type: str, config: dict):
     client = OpenAI(
         api_key=config["key"],
     )
+  elif type == "ollama":
+    if "endpoint" not in config:
+      endpoint = "http://localhost:11434/v1"
+    client = OpenAI(
+        api_key=config["key"],
+        api_base=config["endpoint"]
+    )
   else:
     raise ValueError("Invalid client")
   return client
 
 if openai_config["client"] == "azure":
   client = setup_client("azure", {
+      "endpoint": openai_config["model-endpoint"],
+      "key": openai_config["model-key"],
+      "api-version": openai_config["model-api-version"],
+  })
+elif openai_config["client"] == "ollama":
+  client = setup_client("ollama", {
       "endpoint": openai_config["model-endpoint"],
       "key": openai_config["model-key"],
       "api-version": openai_config["model-api-version"],
@@ -61,6 +74,8 @@ if openai_config["embeddings-client"] == "azure":
   })
 elif openai_config["embeddings-client"] == "openai":
   embeddings_client = setup_client("openai", { "key": openai_config["embeddings-key"] })
+elif openai_config["embeddings-client"] == "ollama":
+  embeddings_client = setup_client("ollama", { "key": openai_config["embeddings-key"] })
 else:
   raise ValueError("Invalid embeddings client")
 
